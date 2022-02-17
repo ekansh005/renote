@@ -1,6 +1,41 @@
+:root {
+  --main-light-color: #fdfdff;
+  --main-dark-color: #393d3f;
+  --main-primary-color: #62929e;
+}
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
+  background-color: var(--main-light-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  all: unset;
+}
+
+.header {
+  padding: 1rem;
+  background-color: var(--main-primary-color);
+  color: var(--main-light-color);
+  display: flex;
+  align-items: center;
+}
+
+.header--logo {
+  margin-right: 1rem;
+  height: 3rem;
+}
+
+.header--title {
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .split {
