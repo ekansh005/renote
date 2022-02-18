@@ -58,12 +58,10 @@ p {
 }
 
 .listItem {
-  padding: 2rem;
   background-color: var(--main-light-color);
   color: var(--main-dark-color);
   display: flex;
   align-items: center;
-  justify-content: space-between;
   border-bottom: 1px solid var(--main-dark-color);
 }
 
@@ -73,9 +71,17 @@ p {
   box-shadow: 0px 0px 0.7rem var(--main-dark-color);
 }
 
+.selectedListItem {
+  background-color: var(--main-primary-color);
+  color: var(--main-light-color);
+  box-shadow: 0px 0px 0.7rem var(--main-dark-color);
+}
+
 .listItem--left {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .listItem--title {
@@ -85,6 +91,11 @@ p {
 
 .listItem--subtitle {
   font-size: 1rem;
+}
+
+.listItem--delete {
+  padding: 2rem;
+  cursor: pointer;
 }
 
 .list--add {

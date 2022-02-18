@@ -5,14 +5,8 @@ import Detail from "./components/Detail";
 import Header from "./components/Header";
 
 function App() {
-  const [notes, setNotes] = React.useState([]);
-  const [selectedNote, setSelectedNote] = React.useState(null);
-
-  React.useEffect(() => {
-    const notes = JSON.parse(localStorage.getItem("notes") || "[]");
-    setNotes(notes);
-    console.log("notes loaded", notes);
-  }, []);
+  const [notes, setNotes] = React.useState(JSON.parse(localStorage.getItem("notes") || "[]"));
+  const [selectedNoteId, setSelectedNoteId] = React.useState((notes[0] && notes[0].id) || null);
 
   React.useEffect(() => {
     localStorage.setItem("notes", JSON.stringify(notes));
@@ -27,12 +21,31 @@ function App() {
       content: "# Start editing the note here",
     };
     setNotes([...notes, newNote]);
-    setSelectedNote(newNote.id);
+    setSelectedNoteId(newNote.id);
   };
 
   const deleteNote = (id) => {
     setNotes(notes.filter((note) => note.id !== id));
-    setSelectedNote((notes[0] && notes[0].id) || null);
+    setSelectedNoteId((notes[0] && notes[0].id) || null);
+  };
+
+  const updateNote = (text) => {
+    const newNotes = notes.map((note) => {
+      if (note.id === selectedNoteId) {
+        return { ...note, content: text };
+      }
+      return note;
+    });
+    setNotes(newNotes);
+  };
+
+  const selectNote = (id) => {
+    const note = notes.find((note) => note.id === id);
+    setSelectedNoteId(note.id);
+  };
+
+  const findCurrentNote = () => {
+    return notes.find((note) => note.id === selectedNoteId);
   };
 
   return (
@@ -50,8 +63,14 @@ function App() {
         direction="horizontal"
         cursor="col-resize"
       >
-        <List addNote={addNote} deleteNote={deleteNote} notes={notes} />
-        <Detail />
+        <List
+          selectedNoteId={selectedNoteId}
+          addNote={addNote}
+          deleteNote={deleteNote}
+          selectNote={selectNote}
+          notes={notes}
+        />
+        <Detail selectedNote={findCurrentNote()} onChange={updateNote} />
       </Split>
     </>
   );

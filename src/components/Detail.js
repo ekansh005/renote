@@ -10,19 +10,20 @@ const converter = new Showdown.Converter({
   tasklists: true,
 });
 
-export default function Detail() {
-  const [value, setValue] = React.useState("**Hello world!!!**");
+export default function Detail(props) {
   const [selectedTab, setSelectedTab] = React.useState("write");
+
   const toggleTab = () => {
     setSelectedTab(selectedTab === "write" ? "preview" : "write");
   };
+
   return (
     <div className="container">
       <ReactMde
         minEditorHeight={78}
         heightUnits="vh"
-        value={value}
-        onChange={setValue}
+        value={(props.selectedNote && props.selectedNote.content) || ""}
+        onChange={props.onChange}
         selectedTab={selectedTab}
         onTabChange={toggleTab}
         generateMarkdownPreview={(markdown) => Promise.resolve(converter.makeHtml(markdown))}
