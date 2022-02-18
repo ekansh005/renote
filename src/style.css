@@ -1,7 +1,7 @@
 :root {
   --main-light-color: #fdfdff;
   --main-dark-color: #393d3f;
-  --main-primary-color: #62929e;
+  --main-primary-color: #61787e;
 }
 
 body {
@@ -22,10 +22,12 @@ p {
 
 .header {
   padding: 1rem;
-  background-color: var(--main-primary-color);
-  color: var(--main-light-color);
+  background-color: var(--main-light-color);
+  color: var(--main-primary-color);
   display: flex;
   align-items: center;
+  box-shadow: 0px 0px 1rem var(--main-dark-color);
+  margin-bottom: 1rem;
 }
 
 .header--logo {
@@ -53,4 +55,29 @@ p {
 .gutter.gutter-horizontal {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==");
   cursor: col-resize;
+}
+
+.listItem {
+  padding: 2rem;
+  background-color: var(--main-light-color);
+  color: var(--main-dark-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--main-dark-color);
+}
+
+.listItem:hover {
+  background-color: var(--main-primary-color);
+  color: var(--main-light-color);
+}
+
+.listItem--left {
+  display: flex;
+  flex-direction: column;
+}
+
+.listItem--title {
+  font-size: 1.2rem;
+  font-weight: 600;
 }
