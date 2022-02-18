@@ -6,7 +6,7 @@ export default function ListItem(props) {
     <div className={`listItem ${props.id === props.selectedNoteId ? "selectedListItem" : ""}`}>
       <div className="listItem--left" onClick={() => props.selectNote(props.id)}>
         <h2 className="listItem--title">{props.title}</h2>
-        <p className="listItem--subtitle">{props.subtitle}</p>
+        <p className="listItem--subtitle">{new Date(props.updatedAt || Date.now()).toLocaleString()}</p>
       </div>
       <FontAwesomeIcon icon={faTrash} className="listItem--delete" onClick={() => props.deleteNote(props.id)} />
     </div>

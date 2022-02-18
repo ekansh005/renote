@@ -17,8 +17,8 @@ function App() {
     const newNote = {
       id: Date.now(),
       title: "New Note",
-      subtitle: new Date().toDateString(),
       content: "# Start editing the note here",
+      updatedAt: Date.now(),
     };
     setNotes([...notes, newNote]);
     setSelectedNoteId(newNote.id);
@@ -30,11 +30,13 @@ function App() {
   };
 
   const updateNote = (text) => {
-    const newNotes = notes.map((note) => {
+    const newNotes = [];
+    notes.forEach((note) => {
       if (note.id === selectedNoteId) {
-        return { ...note, content: text };
+        newNotes.unshift({ ...note, content: text, updatedAt: Date.now() });
+      } else {
+        newNotes.push(note);
       }
-      return note;
     });
     setNotes(newNotes);
   };
