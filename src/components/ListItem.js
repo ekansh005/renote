@@ -8,7 +8,7 @@ export default function ListItem(props) {
         <h2 className="listItem--title">{props.title}</h2>
         <p className="listItem--subtitle">{props.subtitle}</p>
       </div>
-      <FontAwesomeIcon icon={faTrash} />
+      <FontAwesomeIcon icon={faTrash} onClick={() => props.deleteNote(props.id)} />
     </div>
   );
 }

@@ -1,20 +1,16 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import ListItem from "./ListItem";
 
-export default function List() {
-  const data = [
-    {
-      id: 1,
-      title: "List Item Title",
-      subtitle: "Subtitle",
-    },
-    {
-      id: 2,
-      title: "List Item Title",
-      subtitle: "Subtitle",
-    },
-  ];
+export default function List(props) {
+  const listItems = props.notes.map((item) => <ListItem key={item.id} {...item} deleteNote={props.deleteNote} />);
 
-  const listItems = data.map((item) => <ListItem key={item.id} {...item} />);
-
-  return <div className="list">{listItems}</div>;
+  return (
+    <div className="list">
+      <button className="list--add" onClick={props.addNote}>
+        <FontAwesomeIcon icon={faAdd} />
+      </button>
+      {listItems}
+    </div>
+  );
 }
