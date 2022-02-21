@@ -1,5 +1,7 @@
 import React from "react";
 import Split from "react-split";
+import removeMarkdown from "remove-markdown";
+
 import List from "./components/List";
 import Detail from "./components/Detail";
 import Header from "./components/Header";
@@ -20,7 +22,7 @@ function App() {
       content: "# Start editing the note here",
       updatedAt: Date.now(),
     };
-    setNotes([...notes, newNote]);
+    setNotes([newNote, ...notes]);
     setSelectedNoteId(newNote.id);
   };
 
@@ -33,7 +35,12 @@ function App() {
     const newNotes = [];
     notes.forEach((note) => {
       if (note.id === selectedNoteId) {
-        newNotes.unshift({ ...note, content: text, updatedAt: Date.now() });
+        newNotes.unshift({
+          ...note,
+          title: removeMarkdown(text).substring(0, 30),
+          content: text,
+          updatedAt: Date.now(),
+        });
       } else {
         newNotes.push(note);
       }
