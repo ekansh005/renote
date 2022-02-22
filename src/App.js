@@ -69,7 +69,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app">
       <Header session={session} logout={() => supabase.auth.signOut()} />
       {session ? (
         <Split
@@ -96,7 +96,7 @@ function App() {
       ) : (
         <Login />
       )}
-    </>
+    </div>
   );
 }
 
