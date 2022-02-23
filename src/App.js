@@ -9,7 +9,7 @@ import Login from "./components/Login";
 import { supabase } from "./supabaseClient";
 
 function App() {
-  const [notes, setNotes] = React.useState(JSON.parse(localStorage.getItem("notes") || "[]"));
+  const [notes, setNotes] = React.useState([]);
   const [selectedNoteId, setSelectedNoteId] = React.useState((notes[0] && notes[0].id) || null);
   const [session, setSession] = React.useState(null);
 
@@ -19,6 +19,13 @@ function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    async function fetchNotes() {
+      const { data, error } = await supabase.from("notes").select("*");
+      setNotes(error ? [] : data);
+    }
+
+    fetchNotes();
   }, []);
 
   React.useEffect(() => {
@@ -26,15 +33,20 @@ function App() {
     console.log("notes saved", notes);
   }, [notes]);
 
-  const addNote = () => {
+  const addNote = async () => {
     const newNote = {
-      id: Date.now(),
+      // id: Date.now(),
       title: "New Note",
-      content: "# Start editing the note here",
-      updatedAt: Date.now(),
+      note_data: "# Start editing the note here",
+      created_by: session.user.id,
     };
-    setNotes([newNote, ...notes]);
-    setSelectedNoteId(newNote.id);
+    const { data, error } = await supabase.from("notes").insert([newNote]);
+    if (!error) {
+      setNotes([data[0], ...notes]);
+      setSelectedNoteId(data[0].id);
+    } else {
+      alert(error.message);
+    }
   };
 
   const deleteNote = (id) => {
@@ -49,8 +61,8 @@ function App() {
         newNotes.unshift({
           ...note,
           title: removeMarkdown(text).substring(0, 30),
-          content: text,
-          updatedAt: Date.now(),
+          note_data: text,
+          updated_at: Date.now(),
         });
       } else {
         newNotes.push(note);

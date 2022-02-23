@@ -22,7 +22,7 @@ export default function Detail(props) {
       <ReactMde
         minEditorHeight={78}
         heightUnits="vh"
-        value={(props.selectedNote && props.selectedNote.content) || ""}
+        value={(props.selectedNote && props.selectedNote.note_data) || ""}
         onChange={props.onChange}
         selectedTab={selectedTab}
         onTabChange={toggleTab}
