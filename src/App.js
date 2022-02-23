@@ -51,7 +51,7 @@ function App() {
   };
 
   const deleteNote = async (id) => {
-    const { data, error } = await supabase.from("notes").delete().eq("id", id);
+    const { error } = await supabase.from("notes").delete().eq("id", id);
     if (!error) {
       const notes = await fetchNotes();
       setNotes(notes);
