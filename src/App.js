@@ -13,17 +13,18 @@ function App() {
   const [selectedNoteId, setSelectedNoteId] = React.useState((notes[0] && notes[0].id) || null);
   const [session, setSession] = React.useState(null);
 
+  async function fetchNotes() {
+    const { data, error } = await supabase.from("notes").select("*");
+    setNotes(error ? [] : data);
+    return error ? [] : data;
+  }
+
   React.useEffect(() => {
     setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
-    async function fetchNotes() {
-      const { data, error } = await supabase.from("notes").select("*");
-      setNotes(error ? [] : data);
-    }
 
     fetchNotes();
   }, []);
@@ -49,9 +50,15 @@ function App() {
     }
   };
 
-  const deleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
-    setSelectedNoteId((notes[0] && notes[0].id) || null);
+  const deleteNote = async (id) => {
+    const { data, error } = await supabase.from("notes").delete().eq("id", id);
+    if (!error) {
+      const notes = await fetchNotes();
+      setNotes(notes);
+      setSelectedNoteId((notes[0] && notes[0].id) || null);
+    } else {
+      alert(error.message);
+    }
   };
 
   const updateNote = (text) => {
