@@ -15,7 +15,7 @@ function App() {
   const [session, setSession] = React.useState(null);
 
   async function fetchNotes(bSetFirstNote = false) {
-    const { data, error } = await supabase.from("notes").select("*");
+    const { data, error } = await supabase.from("notes").select("*").order("updated_at", { ascending: false });
     setNotes(error ? [] : data);
     if (bSetFirstNote && data.length > 0) {
       setSelectedNoteId(data[0].id);
@@ -35,6 +35,7 @@ function App() {
 
   React.useEffect(() => {
     debouncedUpdateNote(findCurrentNote());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes]);
 
   const addNote = async () => {
