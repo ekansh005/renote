@@ -1,6 +1,7 @@
 import React from "react";
 import Split from "react-split";
 import removeMarkdown from "remove-markdown";
+import { debounce } from "lodash";
 
 import List from "./components/List";
 import Detail from "./components/Detail";
@@ -13,9 +14,12 @@ function App() {
   const [selectedNoteId, setSelectedNoteId] = React.useState((notes[0] && notes[0].id) || null);
   const [session, setSession] = React.useState(null);
 
-  async function fetchNotes() {
+  async function fetchNotes(bSetFirstNote = false) {
     const { data, error } = await supabase.from("notes").select("*");
     setNotes(error ? [] : data);
+    if (bSetFirstNote && data.length > 0) {
+      setSelectedNoteId(data[0].id);
+    }
     return error ? [] : data;
   }
 
@@ -26,12 +30,11 @@ function App() {
       setSession(session);
     });
 
-    fetchNotes();
+    fetchNotes(true);
   }, []);
 
   React.useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-    console.log("notes saved", notes);
+    debouncedUpdateNote(findCurrentNote());
   }, [notes]);
 
   const addNote = async () => {
@@ -54,14 +57,27 @@ function App() {
     const { error } = await supabase.from("notes").delete().eq("id", id);
     if (!error) {
       const notes = await fetchNotes();
-      setNotes(notes);
       setSelectedNoteId((notes[0] && notes[0].id) || null);
     } else {
       alert(error.message);
     }
   };
 
-  const updateNote = (text) => {
+  const debouncedUpdateNote = React.useMemo(() => {
+    return debounce(async (note) => {
+      if (note) {
+        const { id, note_data, title } = note;
+        const { error } = await supabase.from("notes").update({ id, note_data, title }).eq("id", id);
+        if (error) {
+          alert(error.message);
+        } else {
+          // fetchNotes();
+        }
+      }
+    }, 1000);
+  }, []);
+
+  const updateNoteLocal = async (text) => {
     const newNotes = [];
     notes.forEach((note) => {
       if (note.id === selectedNoteId) {
@@ -110,7 +126,7 @@ function App() {
             selectNote={selectNote}
             notes={notes}
           />
-          <Detail selectedNote={findCurrentNote()} onChange={updateNote} />
+          <Detail selectedNote={findCurrentNote()} onChange={updateNoteLocal} />
         </Split>
       ) : (
         <Login />
