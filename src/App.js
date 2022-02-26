@@ -29,6 +29,7 @@ function App() {
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      fetchNotes(true);
     });
 
     fetchNotes(true);
