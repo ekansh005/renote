@@ -28,6 +28,7 @@ export default function Detail(props) {
         onTabChange={toggleTab}
         generateMarkdownPreview={(markdown) => Promise.resolve(converter.makeHtml(markdown))}
       />
+      <span className="status">{props.saveStatus}</span>
     </div>
   );
 }

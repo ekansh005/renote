@@ -175,3 +175,10 @@ p {
   font-weight: 600;
   margin-bottom: 1rem;
 }
+
+.status {
+  color: var(--main-dark-color);
+  font-size: 1rem;
+  display: flex;
+  justify-content: right;
+}

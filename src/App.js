@@ -13,6 +13,7 @@ function App() {
   const [notes, setNotes] = React.useState([]);
   const [selectedNoteId, setSelectedNoteId] = React.useState((notes[0] && notes[0].id) || null);
   const [session, setSession] = React.useState(null);
+  const [saveStatus, setSaveStatus] = React.useState("");
 
   async function fetchNotes(bSetFirstNote = false) {
     const { data, error } = await supabase.from("notes").select("*").order("updated_at", { ascending: false });
@@ -72,7 +73,7 @@ function App() {
         if (error) {
           alert(error.message);
         } else {
-          // fetchNotes();
+          setSaveStatus("Saved");
         }
       }
     }, 1000);
@@ -93,6 +94,7 @@ function App() {
       }
     });
     setNotes(newNotes);
+    setSaveStatus("...Saving");
   };
 
   const selectNote = (id) => {
@@ -127,7 +129,7 @@ function App() {
             selectNote={selectNote}
             notes={notes}
           />
-          <Detail selectedNote={findCurrentNote()} onChange={updateNoteLocal} />
+          <Detail selectedNote={findCurrentNote()} onChange={updateNoteLocal} saveStatus={saveStatus} />
         </Split>
       ) : (
         <Login />
